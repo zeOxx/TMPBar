@@ -1,5 +1,7 @@
 ## Title: TMPBar
+## Description: A simple bar that displays handy information in The Elder Scrolls Online - 0.1
 ## APIVersion: 100013
+## SavedVariables: TMPBarVars
 
 TMPBar.lua
 TMPBar.xml
