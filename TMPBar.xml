@@ -1,0 +1,20 @@
+<GuiXml>
+  <Controls>
+    <TopLevelControl name="TMPBarWindow">
+      <Dimensions x="200" y="16" />
+      <Anchor point="LEFT" relativeTo="GuiRoot" relativePoint="BOTTOMLEFT" offsetX="10" offsetY="-10"/>
+ 
+      <Controls>
+
+        <Label name="$(parent)BagSpaceLabel" width="200" height="16" font="ZoFontWinH3" color="ffffff" text="BagSpace" verticalAlignment="CENTER" horizontalAlignment="LEFT">
+          <Anchor point="BOTTOMLEFT" relativeTo="$(parent)" relativePoint="BOTTOMLEFT" />
+        </Label>
+
+        <Label name="$(parent)GoldLabel" width="200" height="16" font="ZoFontWinH3" color="ffffff" text="Gold" verticalAlignment="CENTER" horizontalAlignment="LEFT">
+          <Anchor point="LEFT" relativeTo="$(parent)BagSpaceLabel" relativePoint="RIGHT" offsetX="10"/>
+        </Label>
+
+      </Controls>
+    </TopLevelControl>
+  </Controls>
+</GuiXml>
