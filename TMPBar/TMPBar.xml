@@ -2,7 +2,7 @@
   <Controls>
     <TopLevelControl name="TMPBarWindow">
       <Dimensions x="200" y="16" />
-      <Anchor point="LEFT" relativeTo="GuiRoot" relativePoint="BOTTOMLEFT" offsetX="10" offsetY="-10"/>
+      <Anchor point="LEFT" relativeTo="GuiRoot" relativePoint="BOTTOMLEFT" offsetX="10" offsetY="-15"/>
  
       <Controls>
 

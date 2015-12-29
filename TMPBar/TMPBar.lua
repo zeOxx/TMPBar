@@ -1,17 +1,23 @@
 TMPBar = {}
 TMPBar.name = "TMPBar"
+TMPBar.version = 1
 TMPBar.gold = 0
 TMPBar.maxBagspace = 0
 TMPBar.currentBagspace = 0
 TMPBar.playerName = ""
 TMPBar.goldIcon = zo_iconFormat("esoui/art/currency/currency_gold.dds", 16, 16)
 TMPBar.bagIcon = zo_iconFormat("esoui/art/tooltips/icon_bag.dds", 16, 16)
+TMPBar.default = {
+	BarLocation = "BOTTOMLEFT"
+}
+
 
 function TMPBar:Init()
 	TMPBar.playerName = GetUnitName("player")
-	d(TMPBar.playerName)
-	TMPBar.SetBagSlots()
 	TMPBar.gold = GetCurrentMoney("player")
+	TMPBar.savedVariables = ZO_SavedVars:New("TMPBarVars", TMPBar.version, nil, TMPBar.Default)
+
+	TMPBar.SetBagSlots()
 	TMPBar.SetCash()
 
 	EVENT_MANAGER:UnregisterForEvent(TMPBar.name, EVENT_ADD_ON_LOADED)
@@ -24,7 +30,6 @@ function TMPBar.OnAddOnLoaded(event, addonName)
 end
 
 function TMPBar.UpdateGoldAmount(eventCode, newMoney, oldMoney, reason)
-	--d("Gold received: " .. newMoney - oldMoney)
 	TMPBar.gold = newMoney - oldMoney
 	TMPBar.SetCash()
 	TMPBar.SetBagSlots()
@@ -50,18 +55,9 @@ function TMPBar.SetBagSlots()
 		TMPBarWindowBagSpaceLabel:SetColor(255, 255, 255)
 	end 
 
-	--d("Bagspace: " .. TMPBar.currentBagspace .. "/" .. TMPBar.maxBagspace)
 	TMPBarWindowBagSpaceLabel:SetText(TMPBar.bagIcon .. TMPBar.currentBagspace .. "/" .. TMPBar.maxBagspace)
 end
 
 function TMPBar.SetCash()
 	TMPBarWindowGoldLabel:SetText(TMPBar.goldIcon .. TMPBar.gold)
 end
-
-EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_ADD_ON_LOADED, TMPBar.OnAddOnLoaded)
-EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_MONEY_UPDATE, TMPBar.UpdateGoldAmount)
-EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_INVENTORY_BOUGHT_BAG_SPACE, TMPBar.SetBagSlots)
-EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_INVENTORY_SINGLE_SLOT_UPDATE, TMPBar.SetBagSlots)
-EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_INVENTORY_FULL_UPDATE, TMPBar.SetBagSlots)
-EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_INVENTORY_ITEM_USED, TMPBar.SetBagSlots)
-EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_GAME_CAMERA_UI_MODE_CHANGED, TMPBar.UIChanged)
