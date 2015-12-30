@@ -4,13 +4,16 @@ TMPBar.version = 1
 TMPBar.gold = 0
 TMPBar.maxBagspace = 0
 TMPBar.currentBagspace = 0
+TMPBar.maxBankBagSpace = 0
+TMPBar.currentBankBagSpace = 0
 TMPBar.playerName = ""
 TMPBar.goldIcon = zo_iconFormat("esoui/art/currency/currency_gold.dds", 16, 16)
 TMPBar.bagIcon = zo_iconFormat("esoui/art/tooltips/icon_bag.dds", 16, 16)
+TMPBar.bankBagIcon = zo_iconFormat("esoui/art/icons/servicemappins/servicepin_bank.dds", 16, 16)
+
 TMPBar.default = {
 	BarLocation = "BOTTOMLEFT"
 }
-
 
 function TMPBar:Init()
 	TMPBar.playerName = GetUnitName("player")
@@ -18,6 +21,7 @@ function TMPBar:Init()
 	TMPBar.savedVariables = ZO_SavedVars:New("TMPBarVars", TMPBar.version, nil, TMPBar.Default)
 
 	TMPBar.SetBagSlots()
+	TMPBar.SetBankBagSlots()
 	TMPBar.SetCash()
 
 	EVENT_MANAGER:UnregisterForEvent(TMPBar.name, EVENT_ADD_ON_LOADED)
@@ -56,6 +60,13 @@ function TMPBar.SetBagSlots()
 	end 
 
 	TMPBarWindowBagSpaceLabel:SetText(TMPBar.bagIcon .. TMPBar.currentBagspace .. "/" .. TMPBar.maxBagspace)
+end
+
+function TMPBar.SetBankBagSlots()
+	TMPBar.currentBankBagSpace = GetNumBagUsedSlots(BAG_BANK)
+	TMPBar.maxBankBagSpace = GetBagSize(BAG_BANK)
+
+	TMPBarWindowBankSpaceLabel:SetText(TMPBar.bankBagIcon .. TMPBar.currentBankBagSpace .. "/" .. TMPBar.maxBankBagSpace)
 end
 
 function TMPBar.SetCash()

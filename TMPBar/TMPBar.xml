@@ -11,7 +11,11 @@
         </Label>
 
         <Label name="$(parent)GoldLabel" width="200" height="16" font="ZoFontWinH3" color="ffffff" text="Gold" verticalAlignment="CENTER" horizontalAlignment="LEFT">
-          <Anchor point="LEFT" relativeTo="$(parent)BagSpaceLabel" relativePoint="RIGHT" offsetX="10"/>
+          <Anchor point="LEFT" relativeTo="$(parent)BagSpaceLabel" relativePoint="RIGHT" offsetX="10" />
+        </Label>
+
+        <Label name="$(parent)BankSpaceLabel" width="200" height="16" font="ZoFontWinH3" color="ffffff" text="BankBagSpace" verticalAlignment="CENTER" horizontalAlignment="LEFT">
+          <Anchor point="LEFT" relativeTo="$(parent)GoldLabel" relativePoint="RIGHT" offsetX="10" />
         </Label>
 
       </Controls>
