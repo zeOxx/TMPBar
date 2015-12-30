@@ -1,5 +1,5 @@
 ## Title: TMPBar
-## Description: A simple bar that displays handy information in The Elder Scrolls Online - 0.1
+## Description: A simple bar that displays handy information - v0.2
 ## APIVersion: 100013
 ## SavedVariables: TMPBarVars
 
