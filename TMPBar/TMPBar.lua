@@ -34,7 +34,7 @@ function TMPBar.OnAddOnLoaded(event, addonName)
 end
 
 function TMPBar.UpdateGoldAmount(eventCode, newMoney, oldMoney, reason)
-	TMPBar.gold = newMoney - oldMoney
+	TMPBar.gold = oldMoney + newMoney
 	TMPBar.SetCash()
 	TMPBar.SetBagSlots()
 end
