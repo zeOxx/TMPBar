@@ -1,6 +1,5 @@
-TMPBar = {}
+local TMPBar = {}
 TMPBar.name = "TMPBar"
-TMPBar.version = 1
 TMPBar.gold = 0
 TMPBar.maxBagspace = 0
 TMPBar.currentBagspace = 0
@@ -11,53 +10,57 @@ TMPBar.goldIcon = zo_iconFormat("esoui/art/currency/currency_gold.dds", 16, 16)
 TMPBar.bagIcon = zo_iconFormat("esoui/art/tooltips/icon_bag.dds", 16, 16)
 TMPBar.bankBagIcon = zo_iconFormat("esoui/art/icons/servicemappins/servicepin_bank.dds", 16, 16)
 
+TMPBar.savedVariables = nil
+TMPBar.version = 3
 TMPBar.default = {
-	BarLocation = "BOTTOMLEFT"
+	BarLocation = "BOTTOMLEFT",
+	warningWhen = 15,
+	normalColor = { 255, 255, 255, 1 },
+	warningColor = { 236, 202, 0, 1 },
+	fullColor = { 230, 0, 0, 1 },
+	showBankBag = true
 }
 
-function TMPBar:Init()
+function TMPBar.Init()
 	TMPBar.playerName = GetUnitName("player")
 	TMPBar.gold = GetCurrentMoney("player")
-	TMPBar.savedVariables = ZO_SavedVars:New("TMPBarVars", TMPBar.version, nil, TMPBar.Default)
+	TMPBar.savedVariables = ZO_SavedVars:New("TMPBarVars", TMPBar.version, nil, TMPBar.default)
 
 	TMPBar.SetBagSlots()
 	TMPBar.SetBankBagSlots()
 	TMPBar.SetCash()
 
+	TMPBar.CreateSettingsWindow()
+
 	EVENT_MANAGER:UnregisterForEvent(TMPBar.name, EVENT_ADD_ON_LOADED)
+
+	EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_MONEY_UPDATE, TMPBar.UpdateGoldAmount)
+	EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_INVENTORY_BOUGHT_BAG_SPACE, TMPBar.SetBagSlots)
+	EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_INVENTORY_SINGLE_SLOT_UPDATE, TMPBar.SetBagSlots)
+	EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_INVENTORY_FULL_UPDATE, TMPBar.SetBagSlots)
+	EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_INVENTORY_ITEM_USED, TMPBar.SetBagSlots)
+	EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_GAME_CAMERA_UI_MODE_CHANGED, TMPBar.UIChanged)
+	EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_CLOSE_BANK, TMPBar.SetBankBagSlots)
 end
 
 function TMPBar.OnAddOnLoaded(event, addonName)
 	if addonName == TMPBar.name then
-		TMPBar:Init()
+		TMPBar.Init()
 	end
-end
-
-function TMPBar.UpdateGoldAmount(eventCode, newMoney, oldMoney, reason)
-	TMPBar.gold = newMoney
-	TMPBar.SetCash()
-	TMPBar.SetBagSlots()
-end
-
-function TMPBar.UIChanged(eventCode)
-	if IsGameCameraUIModeActive() then
-        TMPBarWindow:SetHidden(true)
-    else
-        TMPBarWindow:SetHidden(false)
-    end
 end
 
 function TMPBar.SetBagSlots()
 	TMPBar.currentBagspace = GetNumBagUsedSlots(BAG_BACKPACK)
 	TMPBar.maxBagspace = GetBagSize(BAG_BACKPACK)
 
-	if TMPBar.maxBagspace - TMPBar.currentBagspace == 0 then
-		TMPBarWindowBagSpaceLabel:SetColor(229, 0, 0)
-	elseif TMPBar.maxBagspace - TMPBar.currentBagspace < 16 then
-		TMPBarWindowBagSpaceLabel:SetColor(236, 202, 0)
-	elseif TMPBar.maxBagspace - TMPBar.currentBagspace > 15 then
-		TMPBarWindowBagSpaceLabel:SetColor(255, 255, 255)
-	end 
+	-- Color code bagspace based on saved range
+	if GetBagSize(BAG_BACKPACK) - GetNumBagUsedSlots(BAG_BACKPACK) == 0 then
+		TMPBarWindowBagSpaceLabel:SetColor(unpack(TMPBar.savedVariables.fullColor))
+	elseif GetBagSize(BAG_BACKPACK) - GetNumBagUsedSlots(BAG_BACKPACK) < (TMPBar.savedVariables.warningWhen + 1) then
+		TMPBarWindowBagSpaceLabel:SetColor(unpack(TMPBar.savedVariables.warningColor))
+	elseif GetBagSize(BAG_BACKPACK) - GetNumBagUsedSlots(BAG_BACKPACK) > TMPBar.savedVariables.warningWhen then
+		TMPBarWindowBagSpaceLabel:SetColor(unpack(TMPBar.savedVariables.normalColor))
+	end
 
 	TMPBarWindowBagSpaceLabel:SetText(TMPBar.bagIcon .. TMPBar.currentBagspace .. "/" .. TMPBar.maxBagspace)
 end
@@ -66,9 +69,115 @@ function TMPBar.SetBankBagSlots()
 	TMPBar.currentBankBagSpace = GetNumBagUsedSlots(BAG_BANK)
 	TMPBar.maxBankBagSpace = GetBagSize(BAG_BANK)
 
+	TMPBarWindowBankSpaceLabel:SetHidden(not TMPBar.savedVariables.showBankBag)
 	TMPBarWindowBankSpaceLabel:SetText(TMPBar.bankBagIcon .. TMPBar.currentBankBagSpace .. "/" .. TMPBar.maxBankBagSpace)
 end
 
 function TMPBar.SetCash()
 	TMPBarWindowGoldLabel:SetText(TMPBar.goldIcon .. TMPBar.gold)
 end
+
+function TMPBar.UpdateGoldAmount(eventCode, newMoney, oldMoney, reason)
+	TMPBar.gold = newMoney
+	TMPBar.SetCash()
+end
+
+function TMPBar.UIChanged(eventCode)
+	if IsGameCameraUIModeActive() then
+		TMPBarWindow:SetHidden(true)
+	else
+		TMPBarWindow:SetHidden(false)
+	end
+end
+
+function TMPBar.CreateSettingsWindow()
+	local LAM = LibStub("LibAddonMenu-2.0")
+
+	local panelData = {
+		type = "panel",
+		name = "TMPBar",
+		displayName = "TMPBar",
+		author = "zeOx",
+		version = TMPBar.version,
+		slashCommand = "/TMPBar",
+		registerForRefresh = true,
+		registerForDefaults = true,
+	}
+
+	local cntrlOptionsPanel = LAM:RegisterAddonPanel("TMPBar", panelData)
+
+	-- Table time!
+	local optionsData = {
+		[1] = {
+			type = "header",
+			name = "TMPBar Settings",
+		},
+		[2] = {
+			type = "description",
+			text = "Adjust some settings will ya?",
+		},
+		[3] = {
+			type = "checkbox",
+			name = "Show bank bag",
+			tooltip = "Determine wether or not your bank bag is shown",
+			default = true,
+			getFunc = function () return TMPBar.savedVariables.showBankBag end,
+			setFunc = function (newValue)
+						TMPBar.savedVariables.showBankBag = newValue
+						TMPBarWindowBankSpaceLabel:SetHidden(not newValue)
+					end,
+		},
+		[4] = {
+			type = "submenu",
+			name = "Colors",
+			tooltip = "Change bag colors.",
+			controls = {
+				[1] = {
+					type = "colorpicker",
+					name = "Normal color",
+					tooltip = "Changes the normal color of the bag text.",
+					getFunc = function () return unpack(TMPBar.savedVariables.normalColor) end,
+					setFunc = function (r, g, b, a)
+								TMPBar.savedVariables.normalColor = { r, g, b, a }
+								TMPBarWindowBagSpaceLabel:SetColor(r, g, b, a)
+							end,
+				},
+				[2] = {
+					type = "colorpicker",
+					name = "Warning color",
+					tooltip = "Changes the warning color of the bag text.",
+					getFunc = function () return unpack(TMPBar.savedVariables.warningColor) end,
+					setFunc = function (r, g, b, a)
+								TMPBar.savedVariables.warningColor = { r, g, b, a },
+								TMPBarWindowBagSpaceLabel:SetColor(r, g, b, a)
+							end,
+				},
+				[3] = {
+					type = "colorpicker",
+					name = "Full color",
+					tooltip = "Changes the color of the bag text when bags are full.",
+					getFunc = function () return unpack(TMPBar.savedVariables.fullColor) end,
+					setFunc = function (r, g, b, a)
+								TMPBar.savedVariables.fullColor = { r, g, b, a },
+								TMPBarWindowBagSpaceLabel:SetColor(r, g, b, a)
+							end,
+				}
+			}
+		},
+		[5] = {
+			type = "dropdown",
+			name = "Warning",
+			tooltip = "Choose when to set the warningcolor on the bag text",
+			choices = { 5, 10, 15, 20 },
+			getFunc = function () return TMPBar.savedVariables.warningWhen end,
+			setFunc = function (newValue)
+						TMPBar.savedVariables.warningWhen = newValue
+					end,
+		},
+	}
+
+	LAM:RegisterOptionControls("TMPBar", optionsData)
+end
+
+-- EVENTS!
+EVENT_MANAGER:RegisterForEvent(TMPBar.name, EVENT_ADD_ON_LOADED, TMPBar.OnAddOnLoaded)
