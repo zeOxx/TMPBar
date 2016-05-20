@@ -5,3 +5,6 @@ Look at the [wiki](https://github.com/zeOxx/TMPBar/wiki) for [more information](
 ![shot](http://i.imgur.com/qPovrto.png)  
 ![settings](http://imgur.com/t9F2FuP.png)  
 [Full screenshot here](http://i.imgur.com/R5uTCGG.png)
+
+---
+This addon no longer works in newer versions of the game!
