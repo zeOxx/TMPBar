@@ -11,7 +11,7 @@ TMPBar.bagIcon = zo_iconFormat("esoui/art/tooltips/icon_bag.dds", 16, 16)
 TMPBar.bankBagIcon = zo_iconFormat("esoui/art/icons/servicemappins/servicepin_bank.dds", 16, 16)
 
 TMPBar.savedVariables = nil
-TMPBar.version = 3
+TMPBar.version = 4
 TMPBar.default = {
 	BarLocation = "BOTTOMLEFT",
 	warningWhen = 15,
@@ -98,7 +98,7 @@ function TMPBar.CreateSettingsWindow()
 		name = "TMPBar",
 		displayName = "TMPBar",
 		author = "zeOx",
-		version = TMPBar.version,
+		version = "0." .. tostring(TMPBar.version),
 		slashCommand = "/TMPBar",
 		registerForRefresh = true,
 		registerForDefaults = true,
