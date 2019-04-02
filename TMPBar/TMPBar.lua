@@ -114,7 +114,7 @@ function TMPBar.CreateSettingsWindow()
 		},
 		[2] = {
 			type = "description",
-			text = "Adjust some settings will ya?",
+			text = "Basic settings for the TMPBar addon",
 		},
 		[3] = {
 			type = "checkbox",
