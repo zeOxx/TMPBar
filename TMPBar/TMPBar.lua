@@ -124,7 +124,7 @@ function TMPBar.CreateSettingsWindow()
 		name = "TMPBar",
 		displayName = "TMPBar",
 		author = "zeOx",
-		version = "0." .. tostring(TMPBar.version),
+		version = "1.0",
 		slashCommand = "/TMPBar",
 		registerForRefresh = true,
 		registerForDefaults = true,
