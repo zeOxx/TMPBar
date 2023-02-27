@@ -1,24 +1,8 @@
 ## Title: TMPBar
-## Description: A simple bar that displays handy information - v1.0
-## APIVersion: 100027
+## Description: A simple bar that displays handy information - v1.01
+## APIVersion: 101036
 ## SavedVariables: TMPBarVars
-## OptionalDependsOn: LibAddonMenu-2.0
-
-Libs/LibStub/LibStub.lua
-Libs/LibAddonMenu-2.0/LibAddonMenu-2.0.lua
-Libs/LibAddonMenu-2.0/controls/panel.lua
-Libs/LibAddonMenu-2.0/controls/submenu.lua
-Libs/LibAddonMenu-2.0/controls/button.lua
-Libs/LibAddonMenu-2.0/controls/checkbox.lua
-Libs/LibAddonMenu-2.0/controls/colorpicker.lua
-Libs/LibAddonMenu-2.0/controls/custom.lua
-Libs/LibAddonMenu-2.0/controls/description.lua
-Libs/LibAddonMenu-2.0/controls/dropdown.lua
-Libs/LibAddonMenu-2.0/controls/editbox.lua
-Libs/LibAddonMenu-2.0/controls/header.lua
-Libs/LibAddonMenu-2.0/controls/slider.lua
-Libs/LibAddonMenu-2.0/controls/texture.lua
-Libs/LibAddonMenu-2.0/controls/iconpicker.lua
+## DependsOn: LibAddonMenu-2.0
 
 TMPBar.lua
 TMPBar.xml
