@@ -20,7 +20,8 @@ TMPBar.default = {
 	warningColor = { 236, 202, 0, 1 },
 	fullColor = { 230, 0, 0, 1 },
 	showBankBag = true,
-	alwaysShow = false
+	alwaysShow = false,
+	showPercent = false
 }
 
 function TMPBar.Init()
@@ -74,19 +75,29 @@ function TMPBar.SetBagSlots()
 		TMPBarWindowBagSpaceLabel:SetColor(unpack(TMPBar.savedVariables.normalColor))
 	end
 
-	TMPBarWindowBagSpaceLabel:SetText(TMPBar.bagIcon .. TMPBar.currentBagspace .. "/" .. TMPBar.maxBagspace)
+	if TMPBar.savedVariables.showPercent then
+		TMPBarWindowBagSpaceLabel:SetText(TMPBar.bagIcon .. " " .. TMPBar.currentBagspace .. "/" .. TMPBar.maxBagspace .. " (" .. math.floor((TMPBar.currentBagspace / TMPBar.maxBagspace) * 100) .. "%)")
+		return
+	end
+
+	TMPBarWindowBagSpaceLabel:SetText(TMPBar.bagIcon .. " " .. TMPBar.currentBagspace .. "/" .. TMPBar.maxBagspace)
 end
 
 function TMPBar.SetBankBagSlots()
 	TMPBar.currentBankBagSpace = GetNumBagUsedSlots(BAG_BANK)
 	TMPBar.maxBankBagSpace = GetBagSize(BAG_BANK)
 
+	if TMPBar.savedVariables.showPercent then
+		TMPBarWindowBankSpaceLabel:SetText(TMPBar.bankBagIcon .. " " .. TMPBar.currentBankBagSpace .. "/" .. TMPBar.maxBankBagSpace .. " (" .. math.floor((TMPBar.currentBankBagSpace / TMPBar.maxBankBagSpace) * 100) .. "%)")
+		return
+	end
+
 	TMPBarWindowBankSpaceLabel:SetHidden(not TMPBar.savedVariables.showBankBag)
-	TMPBarWindowBankSpaceLabel:SetText(TMPBar.bankBagIcon .. TMPBar.currentBankBagSpace .. "/" .. TMPBar.maxBankBagSpace)
+	TMPBarWindowBankSpaceLabel:SetText(TMPBar.bankBagIcon .. " " .. TMPBar.currentBankBagSpace .. "/" .. TMPBar.maxBankBagSpace)
 end
 
 function TMPBar.SetCash()
-	TMPBarWindowGoldLabel:SetText(TMPBar.goldIcon .. TMPBar.gold)
+	TMPBarWindowGoldLabel:SetText(TMPBar.goldIcon .. " " .. TMPBar.gold)
 end
 
 function TMPBar.UpdateGoldAmount(eventCode, newMoney, oldMoney, reason)
@@ -136,7 +147,7 @@ function TMPBar.CreateSettingsWindow()
 	local optionsData = {
 		[1] = {
 			type = "header",
-			name = "General",
+			name = "General"
 		},
 		[2] = {
 			type = "checkbox",
@@ -172,7 +183,7 @@ function TMPBar.CreateSettingsWindow()
 			setFunc = function (newValue)
 						TMPBar.savedVariables.alwaysShow = newValue
 						TMPBarWindow:SetHidden(not TMPBar.savedVariables.alwaysShow)
-					end,
+					end
 		},
 		[4] = {
 			type = "button",
@@ -182,11 +193,11 @@ function TMPBar.CreateSettingsWindow()
 					TMPBarWindow:ClearAnchors()
 					TMPBarWindow:SetAnchor(LEFT, GuiRoot, BOTTOMLEFT, 10, -15)
 					TMPBar.savedVariables.window = nil
-				end,
+				end
 		},
 		[5] = {
 			type = "header",
-			name = "Bag options",
+			name = "Bag options"
 		},
 		[6] = {
 			type = "checkbox",
@@ -199,7 +210,7 @@ function TMPBar.CreateSettingsWindow()
 			setFunc = function (newValue)
 						TMPBar.savedVariables.showBankBag = newValue
 						TMPBarWindowBankSpaceLabel:SetHidden(not newValue)
-					end,
+					end
 		},
 		[7] = {
 			type = "colorpicker",
@@ -210,7 +221,7 @@ function TMPBar.CreateSettingsWindow()
 					end,
 			setFunc = function (r, g, b, a)
 						TMPBar.savedVariables.normalColor = { r, g, b, a }
-					end,
+					end
 		},
 		[8] = {
 			type = "colorpicker",
@@ -221,7 +232,7 @@ function TMPBar.CreateSettingsWindow()
 					end,
 			setFunc = function (r, g, b, a)
 						TMPBar.savedVariables.warningColor = { r, g, b, a }
-					end,
+					end
 		},
 		[9] = {
 			type = "colorpicker",
@@ -232,7 +243,7 @@ function TMPBar.CreateSettingsWindow()
 					end,
 			setFunc = function (r, g, b, a)
 						TMPBar.savedVariables.fullColor = { r, g, b, a }
-					end,
+					end
 		},
 		[10] = {
 			type = "dropdown",
@@ -244,7 +255,21 @@ function TMPBar.CreateSettingsWindow()
 					end,
 			setFunc = function (newValue)
 						TMPBar.savedVariables.warningWhen = newValue
+					end
+		},
+		[11] = {
+			type = "checkbox",
+			name = "Show percentage",
+			tooltip = "Determine wether or not the percentage is shown",
+			default = true,
+			getFunc = function ()
+						return TMPBar.savedVariables.showPercent
 					end,
+			setFunc = function (newValue)
+						TMPBar.savedVariables.showPercent = newValue
+						TMPBar.SetBagSlots()
+						TMPBar.SetBankBagSlots()
+					end
 		},
 	}
 

@@ -1,5 +1,5 @@
 ## Title: TMPBar
-## Description: A simple bar that displays handy information - v1.01
+## Description: A simple bar that displays handy information - v1.02
 ## APIVersion: 101036
 ## SavedVariables: TMPBarVars
 ## DependsOn: LibAddonMenu-2.0
