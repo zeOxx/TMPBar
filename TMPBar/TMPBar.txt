@@ -1,6 +1,7 @@
 ## Title: Glance
-## Description: A simple bar that displays handy information - v1.03
+## Description: A simple bar that displays handy information
 ## APIVersion: 101045
+## Version: 1.03
 ## SavedVariables: TMPBarVars
 
 TMPBar.lua
