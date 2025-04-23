@@ -1,5 +1,5 @@
 local TMPBar = {}
-TMPBar.name = "TMPBar"
+TMPBar.name = "GlanceBar"
 TMPBar.gold = 0
 TMPBar.maxBagspace = 0
 TMPBar.currentBagspace = 0
