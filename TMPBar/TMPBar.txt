@@ -2,7 +2,6 @@
 ## Description: A simple bar that displays handy information - v1.02
 ## APIVersion: 101036
 ## SavedVariables: TMPBarVars
-## DependsOn: LibAddonMenu-2.0
 
 TMPBar.lua
 TMPBar.xml
