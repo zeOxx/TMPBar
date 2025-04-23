@@ -12,7 +12,7 @@ TMPBar.bankBagIcon = zo_iconFormat("esoui/art/icons/servicemappins/servicepin_ba
 TMPBar.lockWindow = true
 
 TMPBar.savedVariables = nil
-TMPBar.version = 5
+TMPBar.version = 6
 TMPBar.default = {
 	BarLocation = "BOTTOMLEFT",
 	warningWhen = 15,
