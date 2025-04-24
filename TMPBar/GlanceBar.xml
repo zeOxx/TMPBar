@@ -1,6 +1,6 @@
 <GuiXml>
 	<Controls>
-		<TopLevelControl name="TMPBarWindow" movable="true">
+		<TopLevelControl name="GlanceBarWindow" movable="true">
 			<Dimensions x="200" y="16" />
 			<Anchor point="LEFT" relativeTo="GuiRoot" relativePoint="BOTTOMLEFT" offsetX="10" offsetY="-15"/>
 

@@ -1,11 +1,18 @@
 ## Title: GlanceBar
-## Description: A simple bar that displays handy information
+## Description: A simple bar that displays handy, glanceable, information
 ## APIVersion: 101045
 ## Version: 1.03
-## SavedVariables: TMPBarVars
+## SavedVariables: GlanceBarVars
+## DependsOn: LibAddonMenu-2.0
 
-TMPBar.lua
-TMPBar.xml
+GlanceBar_Constants.lua
+GlanceBar_Utils.lua
+GlanceBar_State.lua
+GlanceBar_UI.lua
+GlanceBar_Events.lua
+GlanceBar_Settings.lua
+GlanceBar.lua
+GlanceBar.xml
 
 ; This Add-on is not created by, affiliated with or sponsored by ZeniMax
 ; Media Inc. or its affiliates. The Elder Scrolls® and related logos are
