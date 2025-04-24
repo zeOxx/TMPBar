@@ -3,6 +3,7 @@
 ## APIVersion: 101045
 ## Version: 1.03
 ## SavedVariables: TMPBarVars
+## DependsOn: LibAddonMenu-2.0
 
 TMPBar.lua
 TMPBar.xml
